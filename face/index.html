@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Kairosサンプル</title>
+  </head>
+  <body>
+    <canvas id="canvas"/>
+    
+      
+    <script>
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var imgUrl = 'https://raw.githubusercontent.com/webhacck/kairos-sample/master/img/face-sample.jpg';
+      var url = 'https://api.kairos.com/detect?image=%22url%22%3A%22'+encodeURIComponent(imgUrl);
+      var request = new XMLHttpRequest();
+      
+      request.open('POST', url);
+      request.setRequestHeader('app_id', '【自分のAppID】');
+      request.setRequestHeader('app_key', '【自分のKey】');
+      
+      
+      request.onreadystatechange = function () {
+        if (this.readyState === 4) {
+          var res = JSON.parse(this.responseText);
+          var img = new Image();
+          
+          img.src = imgUrl;
+          img.onload = function() {
+            var obj = res.images[0].faces[0];
+            
+            canvas.width = res.images[0].width;
+            canvas.height = res.images[0].height;
+            
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 8;
+            ctx.drawImage(img, 0, 0);
+            ctx.rect(obj.leftEyeCenterX, obj.leftEyeCenterY, 5, 5);
+            ctx.rect(obj.rightEyeCenterX, obj.rightEyeCenterY, 5, 5);
+            ctx.rect(obj.topLeftX, obj.topLeftY, obj.width, obj.height);
+            ctx.stroke();
+          }
+        }
+      };
+      
+      var body = {
+        'image': imgUrl,
+        'selector': 'ROLL'
+      };
+      
+      
+      request.send(JSON.stringify(body));
+    </script>
+  </body>
+</html>
