@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Kairosサンプル</title>
+  </head>
+  <body>
+    
+      
+  <script>
+    var request = new XMLHttpRequest();
+    
+    request.open('GET', 'https://api.kairos.com/v2/analytics/【画像のID】');
+    request.setRequestHeader('app_id', '【自分のAppID】');
+    request.setRequestHeader('app_key', '【自分のKey】');
+    
+    request.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        
+        console.log(JSON.parse(this.responseText));
+    
+      }
+    };
+    
+    request.send();
+
+    </script>
+  </body>
+</html>
